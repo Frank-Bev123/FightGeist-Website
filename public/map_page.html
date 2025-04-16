@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Map Page</title>
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #FCD12A;
+      --peach: #FFE5B4;
+      --dark-green: #1A2421;
+      --light-gray: #333333;
+      --charcoal: #28282B;
+      --white: #FFFFFF;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Roboto', 'Space Mono', monospace;
+      background: linear-gradient(to bottom, var(--charcoal), var(--dark-green));
+      color: var(--white);
+      line-height: 1.6;
+    }
+    
+    /* Header with adjusted gradient and larger title */
+    header {
+      background: linear-gradient(to right, var(--dark-green), var(--light-gray));
+      padding: 20px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    }
+    
+    .nav-left, .nav-right {
+      display: flex;
+      align-items: center;
+    }
+    
+    .nav-left button, .nav-right button {
+      background: none;
+      border: none;
+      color: var(--white);
+      font-weight: bold;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: color 0.3s;
+    }
+    
+    .nav-left button:hover, .nav-right button:hover {
+      color: var(--gold);
+    }
+    
+    .map-title {
+      text-align: center;
+      font-family: 'Space Mono', monospace;
+      font-size: 1.8rem;  /* Increased title size */
+      color: var(--gold);
+      flex-grow: 1;
+    }
+    
+    .map-title h1 {
+      font-size: 1.8rem;
+      margin-bottom: 0.3rem;
+    }
+    
+    .map-description {
+      text-align: center;
+      font-size: 1rem;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+      font-family: 'Roboto', sans-serif;
+    }
+    
+    /* Toggle switch container for view options */
+    .toggle-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 15px 0;
+    }
+    
+    .toggle-container label {
+      display: flex;
+      align-items: center;
+      font-size: 16px;
+      font-weight: bold;
+    }
+    
+    .slider {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 24px;
+      margin-left: 10px;
+    }
+    
+    .slider input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    
+    .slider span {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--charcoal);
+      border-radius: 24px;
+      transition: 0.4s;
+    }
+    
+    .slider span:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: var(--white);
+      border-radius: 50%;
+      transition: 0.4s;
+    }
+    
+    input:checked + span {
+      background-color: #4CAF50;
+    }
+    
+    input:checked + span:before {
+      transform: translateX(26px);
+    }
+    
+    /* Map container */
+    #map {
+      height: 75vh;
+      width: 100vw;
+      border-top: 2px solid #333;
+      display: block;
+    }
+    
+    /* List view container */
+    .list-view {
+      display: none;
+      padding: 20px;
+      background-color: #111;
+      border-top: 2px solid #333;
+      color: var(--white);
+    }
+    
+    .list-view ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    
+    .list-view li {
+      margin: 10px 0;
+      padding: 15px;
+      background: #222;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.6);
+    }
+    
+    .list-view li h3 {
+      margin: 0;
+      font-size: 18px;
+      color: var(--white);
+    }
+    
+    .list-view li p {
+      margin: 5px 0 0;
+      font-size: 14px;
+      color: #bbb;
+    }
+    
+    .reserve-button {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 8px 15px;
+      background-color: #FC8A05;
+      color: var(--white);
+      text-align: center;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 14px;
+      border: 1px solid #ED9E42;
+      box-shadow: 0 3px 5px rgba(0,0,0,0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .reserve-button:hover {
+      background-color: #ED9E42;
+      border-color: #FC8A05;
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav-left">
+      <button onclick="window.location.href='index.html';">Home</button>
+    </div>
+    <div class="map-title">
+      <h1>Find A Studio That’s Right for You!</h1>
+      <p class="map-description">Here you will find a map of local gyms that are supported by FightGeist!</p>
+    </div>
+    <div class="nav-right">
+      <!-- Extra navigation buttons can be added here if needed -->
+    </div>
+  </header>
+  
+  <div class="toggle-container">
+    <label>
+      View:
+      <div class="slider">
+        <input type="checkbox" id="toggleView">
+        <span></span>
+      </div>
+    </label>
+  </div>
+  
+  <div id="map"></div>
+  
+  <div class="list-view">
+    <ul id="pinList"></ul>
+  </div>
+  
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    // Initialize the map centered on State College, PA
+    const map = L.map('map').setView([40.7934, -77.8600], 13);
+    
+    // Add OpenStreetMap tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+    
+    // Define studio pinpoints
+    const pinpoints = [
+      {
+        coords: [40.7929887, -77.8623027],
+        title: "Planet Fitness",
+        description: "Beginner-friendly gym with all necessary equipment",
+        reserveLink: "#"
+      }
+      // Add more pinpoints as needed
+    ];
+    
+    // Add markers for each pinpoint using a single-line template literal
+    pinpoints.forEach(pin => {
+      L.marker(pin.coords)
+        .addTo(map)
+        .bindPopup(`<h3>${pin.title}</h3><p>${pin.description}</p><button class="reserve-button" onclick="alert('Reserve functionality coming soon!')">Reserve</button>`);
+    });
+    
+    // Populate list view
+    const pinList = document.getElementById('pinList');
+    pinpoints.forEach(pin => {
+      const li = document.createElement('li');
+      li.innerHTML = `<h3>${pin.title}</h3><p>${pin.description}</p><button class="reserve-button" onclick="alert('Reserve functionality coming soon!')">Reserve</button>`;
+      pinList.appendChild(li);
+    });
+    
+    // Toggle between map view and list view
+    const toggleView = document.getElementById('toggleView');
+    const mapDiv = document.getElementById('map');
+    const listView = document.querySelector('.list-view');
+    
+    toggleView.addEventListener('change', () => {
+      if (toggleView.checked) {
+        mapDiv.style.display = 'none';
+        listView.style.display = 'block';
+      } else {
+        mapDiv.style.display = 'block';
+        listView.style.display = 'none';
+      }
+    });
+  </script>
+</body>
+</html>
