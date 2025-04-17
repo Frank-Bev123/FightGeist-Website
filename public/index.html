@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FightGeist</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #FCD12A;
+      --peach: #FFE5B4;
+      --dark-green: #1A2421;
+      --charcoal: #28282B;
+      --white: #FFFFFF;
+      --transition-height: 80px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Roboto', 'Space Mono', monospace;
+      background: linear-gradient(to bottom, var(--charcoal), var(--dark-green));
+      color: var(--white);
+      line-height: 1.6;
+    }
+
+    /* Header */
+    header {
+      background: linear-gradient(to right, var(--dark-green), var(--charcoal));
+      padding: 20px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    }
+
+    .logo {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .logo img {
+      height: 80px;
+      transform: scale(3);
+      transform-origin: center;
+    }
+
+    .nav-left,
+    .nav-right {
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-left {
+      justify-content: flex-start;
+    }
+
+    .nav-right {
+      justify-content: flex-end;
+    }
+
+    .nav-left button,
+    .nav-right button {
+      background: none;
+      border: none;
+      color: var(--white);
+      font-weight: bold;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: color 0.3s;
+      position: relative;
+      z-index: 10;
+    }
+
+    .nav-left button:hover,
+    .nav-right button:hover {
+      color: var(--gold);
+    }
+
+    /* Sections */
+    section {
+      position: relative;
+      padding: 60px 20px 80px;
+      overflow: hidden;
+    }
+    .section-curve {
+      clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--transition-height)), 0 100%);
+    }
+    .section-divider {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: var(--transition-height);
+      pointer-events: none;
+      z-index: 2;
+      background: inherit;
+    }
+    .section-divider:after {
+      content: "";
+      position: absolute;
+      top: -40px;
+      left: 0;
+      width: 100%;
+      height: 120%;
+      background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.1));
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 80%);
+      pointer-events: none;
+    }
+
+    .hero {
+      background: linear-gradient(to bottom right, var(--peach), var(--gold));
+      color: var(--dark-green);
+      text-align: center;
+    }
+    .hero h2 {
+      font-size: 3rem;
+      margin-bottom: 20px;
+    }
+    .hero p {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto 30px;
+    }
+    .hero button {
+      background: none;
+      border: 2px solid var(--dark-green);
+      padding: 15px 30px;
+      font-size: 1rem;
+      cursor: pointer;
+      color: var(--dark-green);
+      font-weight: bold;
+      border-radius: 8px;
+      transition: background-color 0.3s, color 0.3s;
+      position: relative;
+      z-index: 5;
+    }
+    .hero button:hover {
+      background-color: var(--dark-green);
+      color: var(--gold);
+    }
+
+    .services {
+      background: var(--charcoal);
+      text-align: center;
+    }
+    .services h3 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      font-weight: bold;
+    }
+    .services ul {
+      list-style: none;
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: left;
+    }
+    .services li {
+      margin: 15px 0;
+      font-size: 1.1rem;
+      padding-left: 30px;
+      position: relative;
+    }
+    .services li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: var(--gold);
+      font-weight: bold;
+    }
+
+    .form-section {
+      background: var(--dark-green);
+      text-align: center;
+    }
+    .form-section h3 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      font-weight: bold;
+    }
+    form {
+      max-width: 600px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    form label {
+      margin: 10px 0 5px;
+      font-weight: bold;
+    }
+    form input, form textarea, form select {
+      padding: 10px;
+      margin-bottom: 15px;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+    .checkbox-group, .radio-group, .instructor-group {
+      margin-bottom: 15px;
+    }
+    .checkbox-group label, .radio-group label, .instructor-group label {
+      margin-right: 10px;
+      display: inline-block;
+      font-weight: normal;
+    }
+    form input[type="submit"] {
+      background: none;
+      border: 2px solid var(--gold);
+      color: var(--gold);
+      font-weight: bold;
+      padding: 12px;
+      cursor: pointer;
+      transition: background-color 0.3s, color 0.3s;
+      position: relative;
+      z-index: 5;
+    }
+    form input[type="submit"]:hover {
+      background-color: var(--gold);
+      color: var(--dark-green);
+    }
+
+    footer {
+      background: var(--peach);
+      color: var(--dark-green);
+      padding: 40px 20px;
+      text-align: center;
+    }
+    footer h4 {
+      font-size: 1.8rem;
+      margin-bottom: 15px;
+    }
+    footer p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .founders-gallery {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 30px;
+      padding: 40px 20px;
+      background-color: inherit;
+      text-align: center;
+    }
+
+    .founder {
+      max-width: 120px;
+      text-align: center;
+      background-color: inherit;
+    }
+
+    .founder img {
+      width: 100%;
+      height: auto;
+      border-radius: 50%;
+      border: 3px solid var(--gold);
+      object-fit: cover;
+      background-color: inherit;
+    }
+
+    .founder-name {
+      margin-top: 10px;
+      color: var(--charcoal);
+      font-weight: bold;
+      font-size: 1rem;
+    }
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--white);
+    }
+    .close-btn:hover {
+      color: var(--gold);
+    }
+    .video-description {
+      font-size: 1rem;
+      color: var(--white);
+      margin: 10px auto 30px;
+      max-width: 800px;
+      line-height: 1.4;
+    }
+
+    /* Modal styles */
+    #modal {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 2000;
+    }
+    #modal.visible {
+      visibility: visible;
+      opacity: 1;
+    }
+    #modal .modal-content {
+      background: var(--charcoal);
+      color: var(--white);
+      padding: 30px;
+      border-radius: 10px;
+      text-align: center;
+      max-width: 500px;
+      width: 90%;
+      position: relative;
+    }
+    #modal .modal-content img {
+      max-width: 150px;
+      margin-bottom: 20px;
+    }
+    #modal .modal-content p {
+      margin: 10px 0;
+    }
+    #modal .modal-content ul {
+      text-align: left;
+      margin: 10px auto 20px;
+      padding-left: 20px;
+    }
+    #modal .modal-content h4 {
+      margin: 15px 0;
+      font-size: 1.2rem;
+    }
+    #modal .modal-content button {
+      background: var(--gold);
+      color: var(--dark-green);
+      border: none;
+      padding: 12px 20px;
+      font-size: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    #modal .modal-content button:hover {
+      background: var(--peach);
+    }
+    .modal-content .modal-note {
+      font-size: 0.85rem;
+      color: #ccc;
+      margin-top: 20px;
+      font-style: italic;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav-left">
+      <button onclick="document.querySelector('footer').scrollIntoView({behavior: 'smooth'});">About Us</button>
+    </div>
+
+    <div class="logo">
+      <img src="/FightGeistLogo2.png" alt="FightGeist Logo" />
+    </div>
+
+    <div class="nav-right">
+      <button onclick="window.location.href='equipment_store.html';">Get Custom Gear</button>
+      <button onclick="window.location.href='map_page.html';">Map Page</button>
+    </div>
+  </header>
+
+  <section class="hero section-curve">
+    <h2>Start Your Own Martial Arts Studio in Your Garage!</h2>
+    <p>We assist in legitimizing and growing your home gym by providing expert guidance on insurance, zoning regulations, and certifications for a compliant, successful business.</p>
+    <button onclick="document.querySelector('.form-section').scrollIntoView({behavior: 'smooth'});">Get Started</button>
+    <div class="section-divider"></div>
+  </section>
+
+  <!-- Video Section -->
+    <section class="video-section section-curve" style="background: var(--dark-green); text-align: center;">
+      <h3 style="font-size: 2rem; color: var(--gold); margin-bottom: 20px;">
+        Is FightGeist the Service That You've Been Looking For?
+      </h3>
+      <video width="80%" controls style="border: 3px solid var(--gold); border-radius: 12px; max-width: 800px;">
+        <source src="FightGeist.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      <!-- ADD THIS DESCRIPTION -->
+      <p class="video-description">
+        Tristan, a Penn State Regional Champion Boxer, and many of his fellow athletes are seeking a simple, turnkey solution to launch their own private martial arts studio.
+      </p>  
+    <div class="section-divider"></div>
+  </section>
+
+  <section class="services section-curve" style="clip-path: polygon(0 var(--transition-height), 100% 0, 100% calc(100% - var(--transition-height)), 0 100%);">
+    <h3>Our Services</h3>
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 40px; max-width: 1200px; margin: 0 auto;">
+      <img src="HomeMMAGym2.jpg" alt="Left Visual" style="width: 280px; height: 180px; object-fit: cover; border-radius: 10px;" />
+      <ul style="flex: 2 1 500px; list-style: none; padding: 0; text-align: left;">
+        <li style="margin: 20px 0; position: relative; padding-left: 30px;"><strong>Insurance Optimization:</strong> Streamlining and finding the best policies for your business.</li>
+        <li style="margin: 20px 0; position: relative; padding-left: 30px;"><strong>Zoning & Compliance:</strong> Expert help with local regulations.</li>
+        <li style="margin: 20px 0; position: relative; padding-left: 30px;"><strong>Certification Support:</strong> Guidance for legitimacy and accreditation.</li>
+        <li style="margin: 20px 0; position: relative; padding-left: 30px;"><strong>Tailored Consulting:</strong> Strategies customized to your gym's unique needs.</li>
+      </ul>
+      <img src="HomeMMAGym4.jpg" alt="Right Visual" style="width: 280px; height: 180px; object-fit: cover; border-radius: 10px;" />
+    </div>
+    <div class="section-divider"></div>
+  </section>
+
+  <section class="form-section section-curve" style="clip-path: polygon(0 var(--transition-height), 100% 0, 100% calc(100% - var(--transition-height)), 0 100%);">
+    <h3>Get Connected</h3>
+    <form id="mmaForm">
+      <label for="fullName">Full Name</label>
+      <input type="text" id="fullName" name="fullName" placeholder="Full Name" required />
+
+      <label for="email">Email Address</label>
+      <input type="email" id="email" name="email" placeholder="Email Address" required />
+
+      <label for="cityState">City &amp; State</label>
+      <input type="text" id="cityState" name="cityState" placeholder="City & State" required />
+
+      <label for="studioIdea">Tell us about your martial arts studio idea...</label>
+      <textarea id="studioIdea" name="studioIdea" rows="4" placeholder="Describe your concept..." required></textarea>
+
+      <fieldset class="checkbox-group">
+        <legend><strong>What discipline(s) will you be teaching? (Select all that apply)</strong></legend>
+        <label><input type="checkbox" name="disciplines[]" value="Muay Thai"> Muay Thai</label>
+        <label><input type="checkbox" name="disciplines[]" value="Boxing"> Boxing</label>
+        <label><input type="checkbox" name="disciplines[]" value="Wrestling"> Wrestling</label>
+        <label><input type="checkbox" name="disciplines[]" value="Jiu-Jitsu"> Jiu-Jitsu</label>
+        <label><input type="checkbox" name="disciplines[]" value="Karate"> Karate</label>
+        <label><input type="checkbox" name="disciplines[]" value="MMA"> MMA</label>
+        <label><input type="checkbox" name="disciplines[]" value="Other"> Other</label>
+      </fieldset>
+
+      <fieldset class="radio-group">
+        <legend><strong>How much space do you have available?</strong></legend>
+        <label><input type="radio" name="space" value="500-1000" required> 500-1000 sq-ft</label>
+        <label><input type="radio" name="space" value="1000-1500"> 1000-1500 sq-ft</label>
+        <label><input type="radio" name="space" value="1500-2000"> 1500-2000 sq-ft</label>
+        <label><input type="radio" name="space" value="2000+"> 2000+ sq-ft</label>
+      </fieldset>
+
+      <fieldset class="instructor-group">
+        <legend><strong>Do you plan to be the sole instructor?</strong></legend>
+        <label><input type="radio" name="instructor" value="Yes" required> Yes</label>
+        <label><input type="radio" name="instructor" value="No"> No</label>
+      </fieldset>
+
+      <label for="otherInfo">Other relevant details (equipment, expected students, etc.)</label>
+      <textarea id="otherInfo" name="otherInfo" rows="3" placeholder="Any additional details..."></textarea>
+
+      <input type="submit" value="Submit" />
+    </form>
+    <div class="section-divider"></div>
+  </section>
+
+  <!-- Modal Popup -->
+  <div id="modal">
+    <div class="modal-content">
+      <span id="closeModal" class="close-btn">&times;</span>
+      <img src="FightGeistLogo.png" alt="FightGeist Logo">
+      <p id="dynamicText"></p>
+      <p>In our first meeting, we'll cover:</p>
+      <ul>
+        <li>Insurance plans</li>
+        <li>Zoning laws</li>
+        <li>Specific business setup</li>
+        <li>Tailored payment plans and services</li>
+      </ul>
+      <h4>First consultation costs $50</h4>
+      <button id="setupMeetingBtn">Set up a meeting</button>
+      <p class="modal-note">
+        * Further consultations will be negotiated after the initial meeting.
+      </p>
+    </div>
+  </div>
+
+  <footer>
+    <h4>About the Founders</h4>
+    <div class="founders-gallery">
+      <div class="founder">
+        <img src="Founder1.jpg" alt="Founder 1" />
+        <div class="founder-name">Daniel</div>
+      </div>
+      <div class="founder">
+        <img src="Founder2.jpg" alt="Founder 2" />
+        <div class="founder-name">Mariam</div>
+      </div>
+      <div class="founder">
+        <img src="Founder3.jpg" alt="Founder 3" />
+        <div class="founder-name">Steven</div>
+      </div>
+      <div class="founder">
+        <img src="Founder4.jpg" alt="Founder 4" />
+        <div class="founder-name">Frank</div>
+      </div>
+      <div class="founder">
+        <img src="Founder5.jpg" alt="Founder 5" />
+        <div class="founder-name">Saif</div>
+      </div>
+    </div>
+    <p>
+      We are passionate martial artists and dedicated entrepreneurs with a vision to empower small and private martial arts studios. As current Penn State students, we combine academic expertise with hands-on business strategy, insurance, and compliance know-how to help you realize your vision. Our mission is to support the next generation of martial arts leaders through comprehensive consulting that streamlines operations and drives growth.
+    </p>
+  </footer>  
+
+  <script>
+    document.getElementById('mmaForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const data = {};
+      formData.forEach((value, key) => {
+        if (data[key]) {
+          if (!Array.isArray(data[key])) data[key] = [data[key]];
+          data[key].push(value);
+        } else {
+          data[key] = value;
+        }
+      });
+
+// Format chosen disciplines into a natural list
+const selected = formData.getAll('disciplines[]');
+const formatList = arr => {
+  if (arr.length === 1) return arr[0];
+  if (arr.length === 2) return arr.join(' and ');
+  return arr.slice(0, -1).join(', ') + ', and ' + arr[arr.length - 1];
+};
+const disciplineText = formatList(selected);
+
+// Note whether they’ll be sole instructor or multiple
+const instructorText = data.instructor === 'No'
+  ? 'with multiple instructors'
+  : 'ran by you as the sole instructor';
+
+// Inject the customized line
+document.getElementById('dynamicText').innerText =
+  `I see that you want to start a ${disciplineText} studio ${instructorText}; We can help you with that! After reviewing your submission, we will send you an email with more detailed information.`;
+
+      // Show the modal popup
+      document.getElementById('modal').classList.add('visible');
+
+      // (Optional) still send data to backend
+      const response = await fetch('http://localhost:3000/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      const result = await response.json();
+      console.log(result.message);
+    });
+// Close on “×” click
+document.getElementById('closeModal')
+  .addEventListener('click', () => {
+    document.getElementById('modal').classList.remove('visible');
+  });
+
+// (Optional) Close when clicking outside the modal-content
+document.getElementById('modal')
+  .addEventListener('click', e => {
+    if (e.target.id === 'modal') {
+      document.getElementById('modal').classList.remove('visible');
+    }
+  });
+  </script>
+</body>
+</html>

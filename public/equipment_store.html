@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FightGeist Equipment Store</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #FCD12A;
+      --peach: #FFE5B4;
+      --dark-green: #1A2421;
+      --charcoal: #28282B;
+      --white: #FFFFFF;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Roboto', 'Space Mono', monospace;
+      background: linear-gradient(to bottom, var(--charcoal), var(--dark-green));
+      color: var(--white);
+      line-height: 1.6;
+    }
+
+    header {
+      background: linear-gradient(to right, var(--dark-green), var(--charcoal));
+      padding: 20px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .nav-left,
+    .nav-right {
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-left button,
+    .nav-right button {
+      background: none;
+      border: none;
+      color: var(--white);
+      font-weight: bold;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: color 0.3s;
+    }
+
+    .nav-left button:hover,
+    .nav-right button:hover {
+      color: var(--gold);
+    }
+
+    .store-title h1 {
+      font-family: 'Space Mono', monospace;
+      font-size: 2.5rem;
+      color: var(--gold);
+      text-align: center;
+      margin: 0;
+    }
+
+    .container {
+      padding: 2rem;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .product {
+      background-color: var(--dark-green);
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .product-image img {
+      width: 150px;
+      height: 150px;
+      object-fit: contain;
+      border: 2px solid var(--gold);
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+
+    .product-info {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .product-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      width: 100%;
+    }
+
+    .quantity-control {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    button.action-btn {
+      background-color: var(--gold);
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s, color 0.3s;
+      width: 100%;
+    }
+
+    button.action-btn:hover {
+      background-color: var(--dark-green);
+      color: var(--gold);
+    }
+
+    .checkout-page {
+      display: none;
+      padding: 2rem;
+    }
+
+    .checkout-page h1 {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    .form-group input {
+      padding: 0.5rem;
+      width: 100%;
+      border: none;
+      border-radius: 4px;
+    }
+
+    .checkout-page button {
+      background-color: var(--gold);
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .checkout-page button:hover {
+      background-color: var(--dark-green);
+      color: var(--gold);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav-left">
+      <button onclick="window.location.href='index.html';">Home</button>
+    </div>
+    <div class="store-title">
+      <h1>FightGeist Equipment Store</h1>
+    </div>
+    <div class="nav-right"></div>
+  </header>
+
+  <div class="container" id="store-page">
+    <div class="products-grid">
+      <div class="product">
+        <div class="product-image">
+          <img src="headgear.png" alt="Head Gear">
+        </div>
+        <div class="product-info">
+          <strong>Head Gear</strong><br>
+          $49.99
+        </div>
+        <div class="product-actions">
+          <div class="quantity-control">
+            <button onclick="updateQuantity('helmet', -1)">-</button>
+            <span id="helmet-qty">0</span>
+            <button onclick="updateQuantity('helmet', 1)">+</button>
+          </div>
+          <button class="action-btn" onclick="goToCheckout()">Buy Now</button>
+        </div>
+      </div>
+
+      <div class="product">
+        <div class="product-image">
+          <img src="gloves.png" alt="Gloves">
+        </div>
+        <div class="product-info">
+          <strong>Gloves</strong><br>
+          $29.99
+        </div>
+        <div class="product-actions">
+          <div class="quantity-control">
+            <button onclick="updateQuantity('gloves', -1)">-</button>
+            <span id="gloves-qty">0</span>
+            <button onclick="updateQuantity('gloves', 1)">+</button>
+          </div>
+          <button class="action-btn" onclick="goToCheckout()">Buy Now</button>
+        </div>
+      </div>
+
+      <div class="product">
+        <div class="product-image">
+          <img src="mat.png" alt="Mats">
+        </div>
+        <div class="product-info">
+          <strong>Mats</strong><br>
+          $99.99
+        </div>
+        <div class="product-actions">
+          <div class="quantity-control">
+            <button onclick="updateQuantity('mats', -1)">-</button>
+            <span id="mats-qty">0</span>
+            <button onclick="updateQuantity('mats', 1)">+</button>
+          </div>
+          <button class="action-btn" onclick="goToCheckout()">Buy Now</button>
+        </div>
+      </div>
+
+      <div class="product">
+        <div class="product-image">
+          <img src="speedbag.png" alt="Speed Bag">
+        </div>
+        <div class="product-info">
+          <strong>Speed Bags</strong><br>
+          $79.99
+        </div>
+        <div class="product-actions">
+          <div class="quantity-control">
+            <button onclick="updateQuantity('bag', -1)">-</button>
+            <span id="bag-qty">0</span>
+            <button onclick="updateQuantity('bag', 1)">+</button>
+          </div>
+          <button class="action-btn" onclick="goToCheckout()">Buy Now</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="checkout-page" id="checkout-page">
+    <h1>Checkout</h1>
+    <div class="form-group">
+      <label for="card-number">Card Number</label>
+      <input type="text" id="card-number" placeholder="1234 5678 9012 3456">
+    </div>
+    <div class="form-group">
+      <label for="expiry">Expiry Date</label>
+      <input type="text" id="expiry" placeholder="MM/YY">
+    </div>
+    <div class="form-group">
+      <label for="cvv">CVV</label>
+      <input type="text" id="cvv" placeholder="123">
+    </div>
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input type="email" id="email" placeholder="example@domain.com">
+    </div>
+    <div class="form-group">
+      <label for="address">Shipping Address</label>
+      <input type="text" id="address" placeholder="123 Fight Street, City, Country">
+    </div>
+    <div class="form-group">
+      <label for="phone">Phone Number</label>
+      <input type="text" id="phone" placeholder="+1234567890">
+    </div>
+    <button class="action-btn" onclick="submitOrder()">Submit Order</button>
+    <br><br>
+    <button onclick="window.location.href='index.html';">Back to Home</button>
+  </div>
+
+  <script>
+    const quantities = {
+      helmet: 0,
+      gloves: 0,
+      mats: 0,
+      bag: 0
+    };
+
+    function updateQuantity(item, change) {
+      quantities[item] = Math.max(0, quantities[item] + change);
+      document.getElementById(`${item}-qty`).innerText = quantities[item];
+    }
+
+    function goToCheckout() {
+      document.getElementById('store-page').style.display = 'none';
+      document.getElementById('checkout-page').style.display = 'block';
+    }
+
+    function submitOrder() {
+      alert('Order submitted! Thank you for your purchase.');
+    }
+  </script>
+</body>
+</html>
