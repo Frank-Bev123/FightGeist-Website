@@ -35,10 +35,12 @@
       position: sticky;
       top: 0;
       z-index: 1000;
-      display: grid;
+      display: flex;
       grid-template-columns: 1fr auto 1fr;
       align-items: center;
       text-align: center;
+      justify-content: space-between;
+      align-items: center; /* <-- ensures vertical centering */
       box-shadow: 0 2px 10px rgba(0,0,0,0.5);
     }
 
@@ -374,7 +376,7 @@
     </div>
 
     <div class="logo">
-      <img src="/FightGeistLogo2.png" alt="FightGeist Logo" />
+      <img src="FightGeistLogo2.png" alt="FightGeist Logo" />
     </div>
 
     <div class="nav-right">
